@@ -1245,8 +1245,11 @@ class AndroidCommands(commands.Commands):
         return client.features.passphrase_protection
 
     def get_client(self, path='android_usb', ui=CustomerUI()) -> 'TrezorClientBase':
-        if self.client is not None and self.path == path:
-            return self.client
+        if self.client:
+            if self.path == path, or self.path == None:
+                return self.client
+            else:
+                self.client.close()
         plugin = self.plugin.get_plugin("trezor")
         client_list = plugin.enumerate()
         print(f"total device====={client_list}")
@@ -1366,6 +1369,10 @@ class AndroidCommands(commands.Commands):
                 print("Update aborted on device.")
             except exceptions.TrezorException as e:
                 raise BaseException("Update failed: {}".format(e))
+
+    def close_client():
+        if self.client:
+            self.client.close()
 
     ####################################################
     ## app wallet
