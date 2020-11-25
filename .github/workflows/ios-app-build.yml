@@ -61,7 +61,6 @@ jobs:
           ./make_ios_project.sh
           gem install fir-cli
         working-directory: ios
-        /.local/l
       - name: Setup cert
         run: ./.github/secrets/decrypt_certs.sh
         env:
