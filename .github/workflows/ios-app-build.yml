@@ -34,12 +34,15 @@ jobs:
       - name: Install brew deps
         run: |
           brew install python@3.8
+          brew unlink python
+          brew link --force python@3.8
       - name: Install python3 deps
         run: |
           python3.8 -m pip install 'setuptools==40.6.2' --user
           python3.8 -m pip install 'cookiecutter==1.6.0' --user
           python3.8 -m pip install 'briefcase==0.2.6' --user
           python3.8 -m pip install 'pbxproj==2.5.1' --user
+          python3.8 -m pip install 'pip==19.0.1' --user
       - name: prepare build env
         run: |
           ./make_ios_project.sh
@@ -50,6 +53,9 @@ jobs:
         env:
           IOS_CERTIFICATE_PASS: ${{ secrets.IOS_CERTIFICATE_PASS }}
           ENCRYPT_PASS: ${{ secrets.ENCRYPT_PASS }}
+      - name: resign so file
+        run: ./coderesign.sh $PROJECT_SCHEME
+        working-directory: $WORKING-DIRECTORY
       - name: Build app
         id: xcodebuild_export
         run: |
