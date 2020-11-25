@@ -84,6 +84,7 @@ echo ""
 
 curl -C - -L "https://briefcase-support.org/python?platform=iOS&version=3.8" -o Python-3.8-iOS-support.b3.tar
 
+git clone --single-branch --branch 3.7 https://github.com/beeware/Python-iOS-template $HOME/.cookiecutters/Python-iOS-template
 python3.8 setup.py ios --support-pkg=Python-3.8-iOS-support.b3.tar
 if [ "$?" != 0 ]; then
 	echo "An error occurred running setup.py"
