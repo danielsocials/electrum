@@ -85,6 +85,7 @@ echo ""
 # workround for Python-iOS-template not support python3.8
 git clone --single-branch --branch 3.7 https://github.com/beeware/Python-iOS-template $HOME/.cookiecutters/Python-iOS-template
 
+mkdir ${HOME}/.briefcase
 curl -C - -L "https://briefcase-support.org/python?platform=iOS&version=3.8" -o ${HOME}/.briefcase/Python-3.8-iOS-support.b3.tar
 
 python3.8 setup.py ios --support-pkg=${HOME}/.briefcase/Python-3.8-iOS-support.b3.tar
