@@ -77,7 +77,7 @@ jobs:
           xcodebuild -exportArchive \
           -exportPath $PWD/build \
           -archivePath $PWD/build/app_build.xcarchive \
-          -exportOptionsPlist $PWD/ExportOptions.plist > logs/xcodebuild_export.log
+          -exportOptionsPlist ${APP_NAME}/${APP_NAME}-Info.plist" > logs/xcodebuild_export.log
         working-directory: $WORKING-DIRECTORY
       - name: push to fir
         if: success()     
