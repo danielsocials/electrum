@@ -34,8 +34,6 @@ jobs:
       - name: Install brew deps
         run: |
           brew install python@3.8
-          brew unlink python
-          brew link --force python@3.8
       - name: Install python3 deps
         run: |
           python3.8 -m pip install 'setuptools==40.6.2' --user
