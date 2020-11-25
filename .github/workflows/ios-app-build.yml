@@ -44,7 +44,7 @@ jobs:
           python3.8 -m pip install 'pbxproj==2.5.1' --user
       - name: prepare build env
         run: |
-          sudo ./make_ios_project.sh
+          ./make_ios_project.sh
           gem install fir-cli
         working-directory: ios
       - name: Setup cert
