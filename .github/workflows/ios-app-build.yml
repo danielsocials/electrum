@@ -1,6 +1,13 @@
 name: Build iOS app
 
-on: [push]
+on:
+  push:
+    branches:
+      - ios_ci_test
+      - bixin_dev
+  pull_request:
+    branches:
+      - bixin_dev
 
 jobs:
   build:
@@ -37,7 +44,7 @@ jobs:
           python3.8 -m pip install 'pbxproj==2.5.1' --user
       - name: prepare build env
         run: |
-          ./make_ios_project.sh
+          sudo ./make_ios_project.sh
           gem install fir-cli
         working-directory: ios
       - name: Setup cert
