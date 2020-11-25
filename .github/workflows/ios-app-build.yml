@@ -60,7 +60,6 @@ jobs:
         run: |
           ./make_ios_project.sh
           gem install fir-cli
-        continue-on-error: true
         working-directory: ios
       - name: Setup cert
         run: ./.github/secrets/decrypt_certs.sh
