@@ -101,7 +101,7 @@ jobs:
           -exportPath $PWD/build \
           -archivePath $PWD/build/app_build.xcarchive \
           -exportOptionsPlist ${APP_NAME}/${APP_NAME}-Info.plist"
-        working-directory: $WORKING_DIRECTORY
+        working-directory: ios/iOS
 #     - name: push to fir
 #       if: success()     
 #       run: |
