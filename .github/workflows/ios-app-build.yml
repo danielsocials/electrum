@@ -70,9 +70,25 @@ jobs:
 #     - name: resign so file
 #       run: ./coderesign.sh $PROJECT_SCHEME
 #       working-directory: $WORKING_DIRECTORY
+      - name: Cache build env1
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-ios-build
+        with:
+          # python cache files are stored in `~/.local` on Linux/macOS
+          path: |
+            - $HOME/.local
+            - $HOME/Library/Caches/Homebrew
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
       - name: Build app
         id: xcodebuild_export
         run: |
+          mkdir build
+          mkdir logs
           xcodebuild archive \
            -workspace "$PROJECT_WORKSPACE" \
            -scheme "$PROJECT_SCHEME" \
