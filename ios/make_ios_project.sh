@@ -107,13 +107,12 @@ if [ -f "${infoplist}" ]; then
 		echo "Encountered error adding custom key NSAppTransportSecurity to plist!"
 		exit 1
 	fi
-	echo "debug 1 ${infoplist} ..."
 	#plutil -insert "UIBackgroundModes" -xml '<array><string>fetch</string></array>' -- ${infoplist}
 	#if [ "$?" != "0" ]; then
 	#	echo "Encountered error adding custom key UIBackgroundModes to plist!"
 	#	exit 1
 	#fi
-	longver=`1.0`
+	longver="1.0"
 	if [ -n "$longver" ]; then
 		shortver=`echo "$longver" | cut -f 1 -d -`
 		plutil -replace "CFBundleVersion" -string "$longver" -- ${infoplist} && plutil -replace "CFBundleShortVersionString" -string "$shortver" -- ${infoplist}
@@ -122,7 +121,6 @@ if [ -f "${infoplist}" ]; then
 			exit 1
 		fi
 	fi
-	echo "debug 2 ${infoplist} ..."
 	# UILaunchStoryboardName -- this is required to get proper iOS screen sizes due to iOS being quirky AF
 	if [ -e "Resources/LaunchScreen.storyboard" ]; then
 		plutil -insert "UILaunchStoryboardName" -string "LaunchScreen" -- ${infoplist}
@@ -132,7 +130,6 @@ if [ -f "${infoplist}" ]; then
 		fi
 	fi
 	# Camera Usage key -- required!
-	echo "debug 3 ${infoplist} ..."
 	plutil -insert "NSCameraUsageDescription" -string "The camera is needed to scan QR codes" -- ${infoplist}
 	# Bluetooth Usage key -- required!! added by sweepmonkli
   plutil -insert "NSBluetoothAlwaysUsageDescription" -string "The Bluetooth is needed to communication with our hardware." -- ${infoplist}
@@ -144,7 +141,6 @@ if [ -f "${infoplist}" ]; then
 	plutil -replace 'UIRequiresFullScreen' -bool NO -- ${infoplist}
 	plutil -insert 'NSFaceIDUsageDescription' -string 'FaceID is used for wallet authentication' -- ${infoplist}
 	plutil -insert 'ITSAppUsesNonExemptEncryption' -bool NO -- ${infoplist}
-	echo "debug 4 ${infoplist} ..."
 
 	# Un-comment the below to enforce only portrait orientation mode on iPHone
 	#plutil -replace "UISupportedInterfaceOrientations" -xml '<array><string>UIInterfaceOrientationPortrait</string></array>' -- ${infoplist}
@@ -155,7 +151,6 @@ if [ -f "${infoplist}" ]; then
 	plutil -insert 'NSPhotoLibraryAddUsageDescription' -string 'Required to save QR images to the photo library' -- ${infoplist}
 	plutil -insert 'NSPhotoLibraryUsageDescription' -string 'Required to save QR images to the photo library' -- ${infoplist}
 	plutil -insert 'LSSupportsOpeningDocumentsInPlace' -bool NO -- ${infoplist}
-	echo "debug 5 ${infoplist} ..."
 fi
 
 if [ -d overrides/ ]; then
