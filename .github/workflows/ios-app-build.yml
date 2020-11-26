@@ -92,8 +92,7 @@ jobs:
            -archivePath $PWD/build/app_build.xcarchive \
            CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY" \
            DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
-           PROVISIONING_PROFILE="$UUID_PROVISION" \
-           CODE_SIGN_STYLE="Manual" > logs/xcodebuild_archive.log
+           PROVISIONING_PROFILE="$UUID_PROVISION"
         working-directory: ios/iOS
       - name: Create ExportOptions
         run: create_export.sh
