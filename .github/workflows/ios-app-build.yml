@@ -94,8 +94,7 @@ jobs:
            DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
            PROVISIONING_PROFILE="$UUID_PROVISION" \
            CODE_SIGN_STYLE="Manual" \
-           IPHONEOS_DEPLOYMENT_TARGET=10.0 \
-           -sdk iphoneos13.2
+           IPHONEOS_DEPLOYMENT_TARGET=10.0
         working-directory: ios/iOS
       - name: Create ExportOptions
         run: create_export.sh
@@ -105,20 +104,20 @@ jobs:
           xcodebuild -exportArchive \
           -exportPath $PWD/build \
           -archivePath $PWD/build/app_build.xcarchive \
-          -exportOptionsPlist ${APP_NAME}/${APP_NAME}-Info.plist" > logs/xcodebuild_export.log
+          -exportOptionsPlist ${APP_NAME}/${APP_NAME}-Info.plist"
         working-directory: $WORKING_DIRECTORY
-      - name: push to fir
-        if: success()     
-        run: |
-            gem install fir-cli
-            fir login -T xxx
-            fir publish $PWD/build/$PROJECT_SCHEME.ipa
-        working-directory: $WORKING_DIRECTORY
-      - name: Publish ipa to iTunes Connect
-        if: env.PUBLISH_IPA == 'true'
-        id: publish_ipa
-        run: xcrun altool --upload-app --type ios \
-              --file "$PWD/build/app_build.ipa" \
-              --username "${{secrets.APPLE_USER}}" --password "${{secrets.APPLE_PASS}}" > logs/publish_ipa.log
-        working-directory: $WORKING_DIRECTORY
+#     - name: push to fir
+#       if: success()     
+#       run: |
+#           gem install fir-cli
+#           fir login -T xxx
+#           fir publish $PWD/build/$PROJECT_SCHEME.ipa
+#       working-directory: $WORKING_DIRECTORY
+#     - name: Publish ipa to iTunes Connect
+#       if: env.PUBLISH_IPA == 'true'
+#       id: publish_ipa
+#       run: xcrun altool --upload-app --type ios \
+#             --file "$PWD/build/app_build.ipa" \
+#             --username "${{secrets.APPLE_USER}}" --password "${{secrets.APPLE_PASS}}" > logs/publish_ipa.log
+#       working-directory: $WORKING_DIRECTORY
 
