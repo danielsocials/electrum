@@ -54,9 +54,9 @@ jobs:
           python3.8 -m pip install --upgrade setuptools --user
           python3.8 -m pip install --upgrade pip --user
           python3.8 -m pip install --upgrade pip-tools --user 
-          python3.8 -m pip install 'cookiecutter==1.6.0' --user
-          python3.8 -m pip install 'briefcase==0.2.6' --user
-          python3.8 -m pip install 'pbxproj==2.5.1' --user
+          python3.8 -m pip install cookiecutter --user
+          python3.8 -m pip install briefcase --user
+          python3.8 -m pip install pbxproj --user
       - name: prepare build env
         run: |
           ./make_ios_project.sh
