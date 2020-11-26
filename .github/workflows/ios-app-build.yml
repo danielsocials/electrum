@@ -22,7 +22,6 @@ jobs:
       CODE_SIGN_IDENTITY: "iPhone Developer"
       UUID_PROVISION: 0242f34b-ae47-4587-8af5-7234d360d9d6
       DEVELOPMENT_TEAM: 6M2QF4T7XG
-      WORKING_DIRECTORY: ios/iOS
       PUBLISH_IPA: false
 
     steps:
@@ -95,18 +94,4 @@ jobs:
           forms: '{"_api_key":"${{ secrets.pgyer_key }}","buildInstallType":1,"buildName":"$APP_NAME"}'
           fileForms: '{"file":"$PWD/build/$APP_NAME.ipk"}'
         working-directory: ios/iOS
-#     - name: push to fir
-#       if: success()     
-#       run: |
-#           gem install fir-cli
-#           fir login -T xxx
-#           fir publish $PWD/build/$PROJECT_SCHEME.ipa
-#       working-directory: ios/iOS
-#     - name: Publish ipa to iTunes Connect
-#       if: env.PUBLISH_IPA == 'true'
-#       id: publish_ipa
-#       run: xcrun altool --upload-app --type ios \
-#             --file "$PWD/build/app_build.ipa" \
-#             --username "${{secrets.APPLE_USER}}" --password "${{secrets.APPLE_PASS}}" > logs/publish_ipa.log
-#       working-directory: ios/iOS
 
