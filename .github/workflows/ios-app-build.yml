@@ -65,21 +65,6 @@ jobs:
         run: |
           ./make_ios_project.sh
         working-directory: ios
-#     - name: resign so file
-#       run: ./coderesign.sh $PROJECT_SCHEME
-#       working-directory: $WORKING_DIRECTORY
-      - name: Cache build env1
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-ios-build
-        with:
-          # python cache files are stored in `~/.local` on Linux/macOS
-          path: |
-            - $HOME/.local
-            - $HOME/Library/Caches/Homebrew
-          key: ${{ runner.os }}-build-${{ env.cache-name }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Build app
         id: xcodebuild_export
         run: |
@@ -102,18 +87,26 @@ jobs:
           -archivePath $PWD/build/app_build.xcarchive \
           -exportOptionsPlist ${APP_NAME}/${APP_NAME}-Info.plist
         working-directory: ios/iOS
+      - name: Upload PGYER File
+        id: pgyer
+        uses: xtayga/upload-pgyer-action@master
+        with:
+          url: https://www.pgyer.com/apiv2/app/upload
+          forms: '{"_api_key":"${{ secrets.pgyer_key }}","buildInstallType":1,"buildName":"$APP_NAME"}'
+          fileForms: '{"file":"$PWD/build/$APP_NAME.ipk"}'
+        working-directory: ios/iOS
 #     - name: push to fir
 #       if: success()     
 #       run: |
 #           gem install fir-cli
 #           fir login -T xxx
 #           fir publish $PWD/build/$PROJECT_SCHEME.ipa
-#       working-directory: $WORKING_DIRECTORY
+#       working-directory: ios/iOS
 #     - name: Publish ipa to iTunes Connect
 #       if: env.PUBLISH_IPA == 'true'
 #       id: publish_ipa
 #       run: xcrun altool --upload-app --type ios \
 #             --file "$PWD/build/app_build.ipa" \
 #             --username "${{secrets.APPLE_USER}}" --password "${{secrets.APPLE_PASS}}" > logs/publish_ipa.log
-#       working-directory: $WORKING_DIRECTORY
+#       working-directory: ios/iOS
 
