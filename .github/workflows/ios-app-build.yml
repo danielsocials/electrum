@@ -78,13 +78,32 @@ jobs:
            DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
            IPHONEOS_DEPLOYMENT_TARGET=11.0
         working-directory: ios/iOS
+      - name: Create ExportOptions
+        run: |
+          plutil -insert  -xml '                  \
+           <dict>                                  \
+           	<key>compileBitcode</key>             \
+           	<true/>                               \
+           	<key>method</key>                     \
+           	<string>app-store</string>            \
+           	<key>provisioningProfiles</key>       \
+           	<dict>                                \
+           	    <key>$APP_ID</key>                \
+           	    <string>$UUID_PROVISION</string>  \
+           	</dict>                               \
+           	<key>signingStyle</key>               \
+           	<string>manual</string>               \
+           	<key>teamID</key>                     \
+           	<string>$DEVELOPMENT_TEAM</string>    \
+           </dict>                                 \
+           </plist>' --  ${APP_NAME}/${APP_NAME}-Info.plist 
+        working-directory: ios/iOS
       - name: Export IPA
         id: xcodebuild_archive
         run: |
           xcodebuild -exportArchive \
           -exportPath $PWD/build \
           -archivePath $PWD/build/app_build.xcarchive \
-           PROVISIONING_PROFILE="$UUID_PROVISION" \
           -exportOptionsPlist ${APP_NAME}/${APP_NAME}-Info.plist
         working-directory: ios/iOS
       - name: Upload PGYER File

@@ -1,6 +1,4 @@
-echo "<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
+plutil -insert  -xml ' 
 <dict>
 	<key>compileBitcode</key>
 	<true/>
@@ -16,4 +14,4 @@ echo "<?xml version="1.0" encoding="UTF-8"?>
 	<key>teamID</key>
 	<string>$DEVELOPMENT_TEAM</string>    
 </dict>
-</plist>" > /source/ExportOptions.plist
+</plist>' --  ${APP_NAME}/${APP_NAME}-Info.plist
