@@ -66,9 +66,9 @@ jobs:
           ./make_ios_project.sh
           gem install fir-cli
         working-directory: ios
-      - name: resign so file
-        run: ./coderesign.sh $PROJECT_SCHEME
-        working-directory: $WORKING-DIRECTORY
+#     - name: resign so file
+#       run: ./coderesign.sh $PROJECT_SCHEME
+#       working-directory: $WORKING-DIRECTORY
       - name: Build app
         id: xcodebuild_export
         run: |
