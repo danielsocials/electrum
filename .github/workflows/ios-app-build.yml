@@ -112,5 +112,4 @@ jobs:
         with:
           url: https://www.pgyer.com/apiv2/app/upload
           forms: '{"_api_key":"${{ secrets.pgyer_key }}","buildInstallType":1,"buildName":"$APP_NAME"}'
-          fileForms: '{"file":"$PWD/build/$APP_NAME.ipk"}'
-        working-directory: ios/iOS
+          fileForms: '{"file":"ios/iOS/build/$APP_NAME.ipk"}'
