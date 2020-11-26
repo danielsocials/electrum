@@ -98,7 +98,7 @@ jobs:
            DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
            PROVISIONING_PROFILE="$UUID_PROVISION" \
            CODE_SIGN_STYLE="Manual" > logs/xcodebuild_archive.log
-        working-directory: $WORKING_DIRECTORY
+        working-directory: ios/iOS
       - name: Create ExportOptions
         run: create_export.sh
       - name: Export IPA
