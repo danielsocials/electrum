@@ -94,8 +94,6 @@ jobs:
            DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
            IPHONEOS_DEPLOYMENT_TARGET=11.0
         working-directory: ios/iOS
-      - name: Create ExportOptions
-        run: create_export.sh
       - name: Export IPA
         id: xcodebuild_archive
         run: |
