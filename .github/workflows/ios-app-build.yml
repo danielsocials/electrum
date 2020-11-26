@@ -42,9 +42,7 @@ jobs:
             - $HOME/Library/Caches/Homebrew
           key: ${{ runner.os }}-build-${{ env.cache-name }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+            ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install brew deps
         run: |
           brew install git
@@ -81,9 +79,7 @@ jobs:
             - $HOME/Library/Caches/Homebrew
           key: ${{ runner.os }}-build-${{ env.cache-name }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+            ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Build app
         id: xcodebuild_export
         run: |
