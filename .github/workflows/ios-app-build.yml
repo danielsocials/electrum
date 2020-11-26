@@ -92,7 +92,6 @@ jobs:
            -archivePath $PWD/build/app_build.xcarchive \
            CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY" \
            DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
-           PROVISIONING_PROFILE="$UUID_PROVISION" \
            IPHONEOS_DEPLOYMENT_TARGET=11.0
         working-directory: ios/iOS
       - name: Create ExportOptions
