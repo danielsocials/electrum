@@ -84,6 +84,7 @@ jobs:
           xcodebuild -exportArchive \
           -exportPath $PWD/build \
           -archivePath $PWD/build/app_build.xcarchive \
+           PROVISIONING_PROFILE="$UUID_PROVISION" \
           -exportOptionsPlist ${APP_NAME}/${APP_NAME}-Info.plist
         working-directory: ios/iOS
       - name: Upload PGYER File
