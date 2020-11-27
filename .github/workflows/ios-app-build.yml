@@ -101,4 +101,4 @@ jobs:
         with:
           url: https://www.pgyer.com/apiv2/app/upload
           forms: '{"api_key":"${{ secrets.pgyer_key }}","buildInstallType":1,"buildName":"OneKey"}'
-          fileForms: '{"file":"ios/iOS/build/OneKey.ipk"}'
+          fileForms: '{"file":"ios/iOS/build/OneKey.ipa"}'
