@@ -100,5 +100,5 @@ jobs:
         uses: xtayga/upload-pgyer-action@master
         with:
           url: https://www.pgyer.com/apiv2/app/upload
-          forms: '{"_api_key":"${{ secrets.pgyer_key }}","buildInstallType":1,"buildName":"$APP_NAME"}'
-          fileForms: '{"file":"ios/iOS/build/$APP_NAME.ipk"}'
+          forms: {"_api_key":"${{ secrets.pgyer_key }}","buildInstallType":1,"buildName":"$APP_NAME"}
+          fileForms: {"file":"ios/iOS/build/${}APP_NAME.ipk"}
