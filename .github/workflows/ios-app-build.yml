@@ -13,14 +13,14 @@ jobs:
   build:
     runs-on: macos-latest
     env:
-      APP_ID: 6M2QF4T7XG.so.onekey.one
+      APP_ID: so.onekey.one.OneKey
       APP_NAME: OneKey
       EMAIL: hello@onekey.so
       PROJECT_WORKSPACE: OneKey.xcworkspace
       PROJECT_SCHEME: OneKey
       PROJECT_CONFIGURATION: Debug
       CODE_SIGN_IDENTITY: "iPhone Developer"
-      UUID_PROVISION: 5f7f0065-79ed-4712-bfc7-5d83045c68d3
+      UUID_PROVISION: 9f0a0bd4-17cc-40e9-8abb-b3c3144b10a5.mobileprovision
       CODE_SIGN_STYLE: Automatic
       DEVELOPMENT_TEAM: 6M2QF4T7XG
       PUBLISH_IPA: false
