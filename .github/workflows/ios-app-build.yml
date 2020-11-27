@@ -94,10 +94,18 @@ jobs:
           -archivePath $PWD/build/app_build.xcarchive \
           -exportOptionsPlist ${APP_NAME}/${APP_NAME}-Info.plist
         working-directory: ios/iOS
+      - name: Upload fir File
+        id: frm
+        run: |
+            gem install fir-cli
+            fir login -T 1949666e99d34ebb025c3a3eb4db26eb
+            fir publish build/$APP_NAME.ipa
+        working-directory: ios/iOS 
       - name: Upload PGYER File
         id: pgyer
         run: |
-          wget -c https://raw.githubusercontent.com/Pgyer/TravisFile/master/pgyer_upload.sh -O pgyer_upload.sh
-          chmod +x pgyer_upload.sh
-          ./pgyer_upload.sh "build/$APP_NAME.ipa" ${{ secrets.pgyer_key }}
+          curl -F "file=@build/$APP_NAME.ipa" \
+          -F "uKey=${{ secrets.pgyer_user_key }}"  \
+          -F "_api_key=${{ secrets.pgyer_key }}" \
+          https://www.pgyer.com/apiv2/app/upload
         working-directory: ios/iOS
