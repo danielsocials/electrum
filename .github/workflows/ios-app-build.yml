@@ -20,7 +20,7 @@ jobs:
       PROJECT_SCHEME: OneKey
       PROJECT_CONFIGURATION: Debug
       CODE_SIGN_IDENTITY: "iPhone Developer"
-      UUID_PROVISION: 0242f34b-ae47-4587-8af5-7234d360d9d6
+      UUID_PROVISION: Automatic
       DEVELOPMENT_TEAM: 6M2QF4T7XG
       PUBLISH_IPA: false
 
@@ -75,15 +75,16 @@ jobs:
            -configuration "$PROJECT_CONFIGURATION" \
            -archivePath $PWD/build/app_build.xcarchive \
            CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY" \
+           PROVISIONING_PROFILE="$UUID_PROVISION" \
            DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
            IPHONEOS_DEPLOYMENT_TARGET=11.0
         working-directory: ios/iOS
-      - name: Create ExportOptions
-        run: |
-          plutil -insert  'provisioningProfiles' -xml "<dict> <key>$APP_ID</key> <string>$UUID_PROVISION</string> </dict>" -- OneKey/OneKey-Info.plist
-          plutil -insert  'teamID' -string "$DEVELOPMENT_TEAM" -- OneKey/OneKey-Info.plist
-          plutil -insert  'signingStyle' -string 'manual' -- OneKey/OneKey-Info.plist
-        working-directory: ios/iOS
+#     - name: Create ExportOptions
+#       run: |
+#         plutil -insert  'provisioningProfiles' -xml "<dict> <key>$APP_ID</key> <string>$UUID_PROVISION</string> </dict>" -- OneKey/OneKey-Info.plist
+#         plutil -insert  'teamID' -string "$DEVELOPMENT_TEAM" -- OneKey/OneKey-Info.plist
+#         plutil -insert  'signingStyle' -string 'manual' -- OneKey/OneKey-Info.plist
+#       working-directory: ios/iOS
       - name: Export IPA
         id: xcodebuild_archive
         run: |
