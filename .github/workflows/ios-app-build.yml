@@ -96,8 +96,8 @@ jobs:
         working-directory: ios/iOS
       - name: Upload PGYER File
         id: pgyer
-        uses: xtayga/upload-pgyer-action@master
-        with:
-          url: https://www.pgyer.com/apiv2/app/upload
-          forms: '{"api_key":"${{ secrets.pgyer_key }}","buildInstallType":1,"buildName":"OneKey"}'
-          fileForms: '{"file":"ios/iOS/build/OneKey.ipa"}'
+        run: |
+          wget -c https://raw.githubusercontent.com/Pgyer/TravisFile/master/pgyer_upload.sh -O pgyer_upload.sh
+          chmod +x pgyer_upload.sh
+          ./pgyer_upload.sh "build/$APP_NAME.ipa" ${{ secrets.pgyer_key }}
+        working-directory: ios/iOS
