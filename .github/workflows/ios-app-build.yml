@@ -21,7 +21,7 @@ jobs:
       PROJECT_CONFIGURATION: Debug
       CODE_SIGN_IDENTITY: "iPhone Developer"
       UUID_PROVISION: 9ec95d41-5005-4176-aed0-ace1746b9b6c
-      CODE_SIGN_STYLE: Automatic
+      CODE_SIGN_STYLE: Manual
       DEVELOPMENT_TEAM: 6M2QF4T7XG
       PUBLISH_IPA: false
 
@@ -76,7 +76,7 @@ jobs:
            -configuration "$PROJECT_CONFIGURATION" \
            -archivePath $PWD/build/app_build.xcarchive \
            CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY" \
-           PROVISIONING_PROFILE="Automatic" \
+           PROVISIONING_PROFILE="$UUID_PROVISION" \
            DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
            CODE_SIGN_STYLE="$CODE_SIGN_STYLE" \
            IPHONEOS_DEPLOYMENT_TARGET=11.0
