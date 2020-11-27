@@ -45,7 +45,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install brew deps
         run: |
-          brew install git
           brew install python@3.8
           brew unlink python
           brew link --force python@3.8
