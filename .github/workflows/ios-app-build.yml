@@ -29,11 +29,13 @@ jobs:
       PUBLISH_IPA: false
 
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout branch
+        uses: actions/checkout@v2
         if: github.event_name != 'pull_request'
         with:
             submodules: 'true'
-      - uses: actions/checkout@v2
+      - name: checkout pull request
+        uses: actions/checkout@v2
         if: github.event_name == 'pull_request'
         with:
             ref: ${{ github.event.pull_request.head.sha }}
