@@ -2,6 +2,11 @@ dist: bionic
 language: python
 python:
     - 3.8
+
+branches:
+  only:
+    - android_ci_test
+
 env:
   global:
     - OWNER=${TRAVIS_REPO_SLUG%/*}
@@ -42,10 +47,6 @@ jobs:
         - ls -la android/app/build/outputs/apk/RegTest/debug
         - if [ $(ls android/app/build/outputs/apk/RegTest/debug/ | grep -c bixin-*) -eq 0 ]; then exit 1; fi
       after_success: true 
-
-branches:
-  except:
-    - travis-build
 
 before_deploy:
   - git tag -f travis-build
