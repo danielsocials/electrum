@@ -100,7 +100,7 @@ jobs:
         with:
           name: dist-ipk
           path: |
-            ios/iOS/build/$APP_NAME.ipa
+            ios/iOS/build/${APP_NAME}.ipa
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -109,10 +109,9 @@ jobs:
         if: success()
         with:
           tag_name: ${{ github.ref }}
-          release_name: OneKey iOS development build (bixin_dev) ${{ github.ref }}
+          release_name: OneKey iOS development build (bixin_dev) ${{ github.commitish}}
           body: |
             Changes in this Release
-            - echo `git log --oneline -n 1 --format=%s HEAD`
           draft: false
           prerelease: true
 #     - name: Upload fir File
