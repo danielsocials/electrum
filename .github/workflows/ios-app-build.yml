@@ -43,6 +43,9 @@ jobs:
           path: |
             - $HOME/.local
             - $HOME/Library/Caches/Homebrew
+            - /Users/runner/Library/Caches/pip/
+            - /Users/runner/.cookiecutters/Python-iOS-template
+            - /Users/runner/work/electrum/electrum/ios/iOS/Pods
           key: ${{ runner.os }}-build-${{ env.cache-name }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -118,16 +121,16 @@ jobs:
             ${{ env.COMMIT_MSG }}
           draft: false
           prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./my-artifact.zip
-          asset_path: ./ios/iOS/build/${{ env.APP_NAME }}.ipa
-          asset_name: ${{ env.APP_NAME }}.ipa
+#     - name: Upload Release Asset
+#       id: upload-release-asset 
+#       uses: actions/upload-release-asset@v1
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       with:
+#         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+#         asset_path: ./my-artifact.zip
+#         asset_path: ./ios/iOS/build/OneKey.ipa
+#         asset_name: OneKey.ipa
 #     - name: Upload fir File
 #       id: frm
 #       run: |
