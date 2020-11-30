@@ -36,7 +36,7 @@ jobs:
         - 
         - sudo docker run --rm -it --name electrum-android-native-builder-cont -v $PWD:/data 
           --workdir=/data/android lightningcn/electrum_env:latest /bin/bash -c 
-          'cp ~/android/local.properties local.properties && ehc "${ PYSECRET }" >> local.properties && cp debug.keystore ~/.android/debug.keystore && /data/android/gradlew app:assembleDebug'
+          'cp ~/android/local.properties local.properties && echo "${ PYSECRET }" >> local.properties && cp debug.keystore ~/.android/debug.keystore && /data/android/gradlew app:assembleDebug'
         # kill background sleep loop
         - kill %1
         - ls -la android/app/build/outputs/apk/RegTest/debug
