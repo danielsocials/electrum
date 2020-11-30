@@ -101,6 +101,19 @@ jobs:
           path: |
             build/$APP_NAME.ipa
         working-directory: ios/iOS 
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: OneKey iOS development build (bixin_dev) ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - echo `git log --oneline -n 1 --format=%s HEAD`
+          draft: false
+          prerelease: true
 #     - name: Upload fir File
 #       id: frm
 #       run: |
