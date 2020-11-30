@@ -104,7 +104,7 @@ jobs:
         uses: actions/upload-artifact@v2
         if: success()
         with:
-          name: OneKey-${{ env.SHORT_SHA }}.ipa
+          name: OneKey-${{ github.sha }}.ipa
           path: |
             ios/iOS/build/${{ env.APP_NAME }}.ipa
       - name: Create Release
