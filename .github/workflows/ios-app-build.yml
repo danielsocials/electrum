@@ -103,7 +103,7 @@ jobs:
         with:
           name: OneKey-${{ env.SHORT_SHA }}.ipa
           path: |
-            ios/iOS/build/OneKey.ipa
+            ios/iOS/build/${{ env.APP_NAME }}.ipa
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -112,7 +112,7 @@ jobs:
         if: success()
         with:
           tag_name: travis-build-ios
-          release_name: OneKey iOS development build (bixin_dev) ${{ github.sha }}
+          release_name: ${{ env.APP_NAME }} iOS development build (bixin_dev) ${{ github.sha }}
           body: |
             Changes in this Release
             ${{ env.COMMIT_MSG }}
@@ -124,8 +124,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          asset_path: ./ios/iOS/build/OneKey.ipa
-          asset_name: OneKey.ipa
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ./my-artifact.zip
+          asset_path: ./ios/iOS/build/${{ env.APP_NAME }}.ipa
+          asset_name: ${{ env.APP_NAME }}.ipa
 #     - name: Upload fir File
 #       id: frm
 #       run: |
