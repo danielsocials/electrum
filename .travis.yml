@@ -74,7 +74,7 @@ deploy:
   overwrite: true
   target_commitish: $TRAVIS_COMMIT
   on:
-    branch: bixin_dev
+    branch: android_ci_test
     tags: false
 
 after_deploy:
