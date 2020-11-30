@@ -10,6 +10,7 @@ on:
       - bixin_dev
 env:
   SHORT_SHA: $(git rev-parse --short ${{ github.sha }})
+  COMMIT_MSG: $(git log --oneline -n 1 --format=%s ${{ github.sha }})
 
 jobs:
   build:
@@ -103,19 +104,20 @@ jobs:
           name: OneKey-"$SHORT_SHA".ipa
           path: |
             ios/iOS/build/OneKey.ipa
-#     - name: Create Release
-#       id: create_release
-#       uses: actions/create-release@v1
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-#       if: success()
-#       with:
-#         tag_name: ios_ci
-#         release_name: OneKey iOS development build (bixin_dev) ${{ github.commitish}}
-#         body: |
-#           Changes in this Release
-#         draft: false
-#         prerelease: true
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        if: success()
+        with:
+          tag_name: travis-build-ios
+          release_name: OneKey iOS development build (bixin_dev) ${{ github.sha }}
+          body: |
+            Changes in this Release
+            $(COMMIT_MSG)
+          draft: false
+          prerelease: true
 #     - name: Upload fir File
 #       id: frm
 #       run: |
