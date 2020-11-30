@@ -117,7 +117,15 @@ jobs:
             Changes in this Release
             $(COMMIT_MSG)
           draft: false
-          prerelease: true
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          asset_path: ./ios/iOS/build/OneKey.ipa
+          asset_name: OneKey.ipa
 #     - name: Upload fir File
 #       id: frm
 #       run: |
