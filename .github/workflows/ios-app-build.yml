@@ -95,10 +95,6 @@ jobs:
           -exportOptionsPlist ${APP_NAME}/${APP_NAME}-Info.plist
         working-directory: ios/iOS
       - name: Archive production artifacts
-        on:
-         push:
-           branches:
-             - ios_ci_test
         uses: actions/upload-artifact@v2
         if: success()
         with:
