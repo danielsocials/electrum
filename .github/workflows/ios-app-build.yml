@@ -100,6 +100,7 @@ jobs:
           name: dist-ipk
           path: |
             build/$APP_NAME.ipa
+        working-directory: ios/iOS 
 #     - name: Upload fir File
 #       id: frm
 #       run: |
