@@ -94,18 +94,24 @@ jobs:
           -archivePath $PWD/build/app_build.xcarchive \
           -exportOptionsPlist ${APP_NAME}/${APP_NAME}-Info.plist
         working-directory: ios/iOS
-      - name: Upload fir File
-        id: frm
-        run: |
-            gem install fir-cli
-            fir login -T 1949666e99d34ebb025c3a3eb4db26eb
-            fir publish build/$APP_NAME.ipa
-        working-directory: ios/iOS 
-      - name: Upload PGYER File
-        id: pgyer
-        run: |
-          curl -F "file=@build/$APP_NAME.ipa" \
-          -F "uKey=${{ secrets.pgyer_user_key }}"  \
-          -F "_api_key=${{ secrets.pgyer_key }}" \
-          https://www.pgyer.com/apiv2/app/upload
-        working-directory: ios/iOS
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist-ipk
+          path: |
+            build/$APP_NAME.ipa
+#     - name: Upload fir File
+#       id: frm
+#       run: |
+#           gem install fir-cli
+#           fir login -T 1949666e99d34ebb025c3a3eb4db26eb
+#           fir publish build/$APP_NAME.ipa
+#       working-directory: ios/iOS 
+#     - name: Upload PGYER File
+#       id: pgyer
+#       run: |
+#         curl -F "file=@build/$APP_NAME.ipa" \
+#         -F "uKey=${{ secrets.pgyer_user_key }}"  \
+#         -F "_api_key=${{ secrets.pgyer_key }}" \
+#         https://www.pgyer.com/apiv2/app/upload
+#       working-directory: ios/iOS
