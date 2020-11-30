@@ -96,16 +96,17 @@ jobs:
         working-directory: ios/iOS
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
+        if: success()
         with:
           name: dist-ipk
           path: |
-            build/$APP_NAME.ipa
-        working-directory: ios/iOS 
+            ios/iOS/build/$APP_NAME.ipa
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        if: success()
         with:
           tag_name: ${{ github.ref }}
           release_name: OneKey iOS development build (bixin_dev) ${{ github.ref }}
