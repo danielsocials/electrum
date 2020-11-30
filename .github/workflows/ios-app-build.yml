@@ -30,7 +30,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        if: github.event_name != 'pull_request'
         with:
+            submodules: 'true'
+        if: github.event_name == 'pull_request'
+        with:
+            ref: ${{ github.event.pull_request.head.sha }}
             submodules: 'true'
       - name: Switch XCode Version
         run: sudo xcode-select -s /Applications/Xcode_12.1.app
