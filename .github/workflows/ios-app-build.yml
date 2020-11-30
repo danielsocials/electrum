@@ -100,7 +100,7 @@ jobs:
         uses: actions/upload-artifact@v2
         if: success()
         with:
-          name: OneKey-${{ SHORT_SHA }}.ipa
+          name: OneKey-"$SHORT_SHA".ipa
           path: |
             ios/iOS/build/OneKey.ipa
 #     - name: Create Release
