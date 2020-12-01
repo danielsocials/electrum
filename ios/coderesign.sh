@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e -u
-read -p "请输入证书名称："  key
+key=$1
 
 if [ -z "${key}" ]; then
    echo "证书名称不能为空"
