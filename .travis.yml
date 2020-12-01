@@ -79,7 +79,8 @@ deploy:
     tags: false
 
 after_deploy:
-  - curl -F "file=@android/app/build/outputs/apk/RegTest/debug/bixin-4000478-RegTest-debug.apk"  -F "uKey=${pyger_userkey}"  -F "_api_key=${pyger_apikey}"  https://www.pgyer.com/apiv2/app/upload
+  - REGTEST_APK_PATH=`ls android/app/build/outputs/apk/RegTest/debug/*.apk`
+  - curl -F "file=@${REGTEST_APK_PATH}"  -F "uKey=${pyger_userkey}"  -F "_api_key=${pyger_apikey}"  https://www.pgyer.com/apiv2/app/upload
 
 notifications:
   slack:
