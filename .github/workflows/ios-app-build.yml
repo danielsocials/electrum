@@ -80,7 +80,7 @@ jobs:
         working-directory: ios
       - name: sign lib
         run: |
-          ./coderesign.sh "${{ secret.CODESIGN_ID }}"
+          ./coderesign.sh "${{ secrets.CODESIGN_ID }}"
         working-directory: ios
       - name: Build app
         id: xcodebuild_export
