@@ -134,27 +134,27 @@ jobs:
 #           ${{ env.COMMIT_MSG }}
 #         draft: false
 #         prerelease: false
-#     - name: copy file via ssh password
-#       uses: appleboy/scp-action@master
-#       with:
-#         host: ${{ secrets.ssh_host }}
-#         username: ${{ secrets.ssh_user }}
-#         password: ${{ secrets.ssh_pass }}
-#         port: 22
-#         source: "ios/iOS/build/${{ env.APP_NAME }}.ipa"
-#         target: "output"
-#     - name: Upload PGYER File
-#       uses: appleboy/ssh-action@master
-#       with:
-#         host: ${{ secrets.HOST }}
-#         username: ${{ secrets.USERNAME }}
-#         password: ${{ secrets.PASSWORD }}
-#         port: ${{ secrets.PORT }}
-#         script: |
-#           curl -F "file=output/ios/iOS/build/${{ env.APP_NAME }}.ipa" \
-#           -F "uKey=${{ secrets.pgyer_user_key }}"  \
-#           -F "_api_key=${{ secrets.pgyer_key }}" \
-#           https://www.pgyer.com/apiv2/app/upload
+     - name: copy file via ssh password
+       uses: appleboy/scp-action@master
+       with:
+         host: ${{ secrets.SSH_HOST }}
+         username: ${{ secrets.SSH_USER }}
+         password: ${{ secrets.SSH_PASS }}
+         port: ${{ secrets.SSH_PORT }}
+         source: "ios/iOS/build/${{ env.APP_NAME }}.ipa"
+         target: "output"
+     - name: Upload PGYER File
+       uses: appleboy/ssh-action@master
+       with:
+         host: ${{ secrets.SSH_HOST }}
+         username: ${{ secrets.SSH_USER }}
+         password: ${{ secrets.SSH_PASS }}
+         port: ${{ secrets.SSH_PORT }}
+         script: |
+           curl -F "file=output/ios/iOS/build/${{ env.APP_NAME }}.ipa" \
+           -F "uKey=${{ secrets.pgyer_user_key }}"  \
+           -F "_api_key=${{ secrets.pgyer_key }}" \
+           https://www.pgyer.com/apiv2/app/upload
 
 #     - name: Upload Release Asset
 #       id: upload-release-asset 
