@@ -148,10 +148,7 @@ jobs:
           scp: |
             "ios/iOS/build/${{ env.APP_NAME }}.ipa" => /output/
           last_ssh: |
-            curl -F "file=output/ios/iOS/build/${{ env.APP_NAME }}.ipa" \
-            -F "uKey=${{ secrets.pgyer_user_key }}"  \
-            -F "_api_key=${{ secrets.pgyer_key }}" \
-            https://www.pgyer.com/apiv2/app/upload
+            cd /output && ./push.sh > log
 #     - name: Install SSH key
 #       uses: shimataro/ssh-key-action@v2
 #       with:
