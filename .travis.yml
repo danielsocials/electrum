@@ -81,8 +81,8 @@ deploy:
 after_deploy:
   - echo $SSH_KEY > ~/.ssh/id_rsa 
   - echo $SSH_KNOWN_HOSTS >> ~/.ssh/known_hosts
-  - REGTEST_APK_PATH =`ls android/app/build/outputs/apk/RegTest/debug/*.apk`
-  - scp REGTEST_APK_PATH ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/output/
+  - export REGTEST_APK_PATH =`ls android/app/build/outputs/apk/RegTest/debug/*.apk`
+  - scp $REGTEST_APK_PATH ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/output/
   - ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /output && ./push.sh ${REGTEST_APK_PATH} > android_log"
 
 notifications:
