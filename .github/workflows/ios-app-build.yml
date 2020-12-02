@@ -45,7 +45,7 @@ jobs:
         with:
           key: ${{ secrets.SSH_KEY }}
           name: id_rsa # optional
-          known_hosts: ${{ secrets.SSH_HOST }}
+          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
       - name: rsync over ssh
         run: rsync "ios/make_ios_project.sh" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/output/
       - name: Upload PGYER File
