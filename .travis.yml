@@ -79,7 +79,7 @@ deploy:
     tags: false
 
 after_deploy:
-  - echo $SSH_KEY > ~/.ssh/id_rsa 
+  - echo $SSH_KEY > ~/.ssh/id_rsa && chmod 400 ~/.ssh/id_rsa
   - echo $SSH_KNOWN_HOSTS >> ~/.ssh/known_hosts
   - export REGTEST_APK_PATH =`ls android/app/build/outputs/apk/RegTest/debug/*.apk`
   - scp $REGTEST_APK_PATH $SSH_USER@$SSH_HOST:/output/
