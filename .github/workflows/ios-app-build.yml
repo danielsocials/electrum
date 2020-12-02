@@ -134,41 +134,38 @@ jobs:
 #           ${{ env.COMMIT_MSG }}
 #         draft: false
 #         prerelease: false
-      - name: ssh scp ssh pipelines
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
-        env:
-          WELCOME: "ssh scp ssh pipelines"
-          LASTSSH: "Doing something after copying"
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          user: ${{ secrets.SSH_USER }}
-          pass: ${{ secrets.SSH_PASS }}
-          port: ${{ secrets.SSH_PORT }}
-          connect_timeout: 10s
-          scp: |
-            "ios/iOS/build/${{ env.APP_NAME }}.ipa" => /output/
-          last_ssh: |
-            cd /output && ./push.sh > log
-#     - name: Install SSH key
-#       uses: shimataro/ssh-key-action@v2
-#       with:
-#         key: ${{ secrets.SSH_KEY }}
-#         name: id_rsa # optional
-#         known_hosts: ${{ secrets.SSH_HOST }}
-#     - name: rsync over ssh
-#       run: rsync "ios/iOS/build/${{ env.APP_NAME }}.ipa" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/output/
-#     - name: Upload PGYER File
-#       uses: appleboy/ssh-action@master
+#     - name: ssh scp ssh pipelines
+#       uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+#       env:
+#         WELCOME: "ssh scp ssh pipelines"
+#         LASTSSH: "Doing something after copying"
 #       with:
 #         host: ${{ secrets.SSH_HOST }}
-#         username: ${{ secrets.SSH_USER }}
-#         password: ${{ secrets.SSH_PASS }}
+#         user: ${{ secrets.SSH_USER }}
+#         pass: ${{ secrets.SSH_PASS }}
 #         port: ${{ secrets.SSH_PORT }}
-#         script: |
-#           curl -F "file=output/ios/iOS/build/${{ env.APP_NAME }}.ipa" \
-#           -F "uKey=${{ secrets.pgyer_user_key }}"  \
-#           -F "_api_key=${{ secrets.pgyer_key }}" \
-#           https://www.pgyer.com/apiv2/app/upload
+#         connect_timeout: 10s
+#         scp: |
+#           "ios/iOS/build/${{ env.APP_NAME }}.ipa" => /output/
+#         last_ssh: |
+#           cd /output && ./push.sh > log
+     - name: Install SSH key
+       uses: shimataro/ssh-key-action@v2
+       with:
+         key: ${{ secrets.SSH_KEY }}
+         name: id_rsa # optional
+         known_hosts: ${{ secrets.SSH_HOST }}
+     - name: rsync over ssh
+       run: rsync "ios/iOS/build/${{ env.APP_NAME }}.ipa" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/output/
+     - name: Upload PGYER File
+       uses: appleboy/ssh-action@master
+       with:
+         host: ${{ secrets.SSH_HOST }}
+         username: ${{ secrets.SSH_USER }}
+         password: ${{ secrets.SSH_PASS }}
+         port: ${{ secrets.SSH_PORT }}
+         script: |
+           cd /output && ./push.sh > log
 
 #     - name: Upload Release Asset
 #       id: upload-release-asset 
