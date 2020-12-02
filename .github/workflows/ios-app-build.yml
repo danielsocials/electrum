@@ -129,7 +129,7 @@ jobs:
       - name: rsync over ssh
         run: |
             rsync "ios/make_ios_project.sh" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/output/
-            ssh cdn "cd /output && ./push.sh >log"
+            ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /output && ./push.sh >log"
 #     - name: Create Release
 #       id: create_release
 #       uses: actions/create-release@v1
