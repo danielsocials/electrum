@@ -128,7 +128,7 @@ jobs:
           known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
       - name: rsync over ssh
         run: |
-            rsync "ios/make_ios_project.sh" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/output/
+            rsync "ios/iOS/build/${{ env.APP_NAME }}.ipa" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/output/
             ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /output && ./push.sh >log"
 #     - name: Create Release
 #       id: create_release
