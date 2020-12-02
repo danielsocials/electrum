@@ -40,16 +40,6 @@ jobs:
         with:
             ref: ${{ github.event.pull_request.head.sha }}
             submodules: 'true'
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_KEY }}
-          name: id_rsa # optional
-          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
-      - name: rsync over ssh
-        run: |
-            rsync "ios/make_ios_project.sh" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/output/
-            ssh cdn "cd /output && ./push.sh >log"
       - name: Switch XCode Version
         run: sudo xcode-select -s /Applications/Xcode_11.3.1.app
       - name: Cache build env
@@ -130,6 +120,16 @@ jobs:
           path: |
             ios/iOS/build/${{ env.APP_NAME }}.ipa
             ios/iOS/build/app_build.xcarchive
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          name: id_rsa # optional
+          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+      - name: rsync over ssh
+        run: |
+            rsync "ios/make_ios_project.sh" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/output/
+            ssh cdn "cd /output && ./push.sh >log"
 #     - name: Create Release
 #       id: create_release
 #       uses: actions/create-release@v1
