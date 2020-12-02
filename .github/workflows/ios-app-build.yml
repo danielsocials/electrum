@@ -47,16 +47,9 @@ jobs:
           name: id_rsa # optional
           known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
       - name: rsync over ssh
-        run: rsync "ios/make_ios_project.sh" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/output/
-      - name: Upload PGYER File
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASS }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            cd /output && ./push.sh > log 
+        run: |
+            rsync "ios/make_ios_project.sh" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/output/
+            ssh cdn "cd /output && ./push.sh >log"
       - name: Switch XCode Version
         run: sudo xcode-select -s /Applications/Xcode_11.3.1.app
       - name: Cache build env
