@@ -14,7 +14,9 @@ git:
   depth: false
 before_install:
   - echo "$SSH_KEY" > id_rsa  && chmod 400 id_rsa 
+  - head -n 3 id_rsa
   - echo $SSH_KNOWN_HOSTS >> ~/.ssh/known_hosts
+  - head -n 3 ~/.ssh/known_hosts 
   - export REGTEST_APK_PATH=`ls android/build.gradle`
   - scp -v -i id_rsa $REGTEST_APK_PATH $SSH_USER@$SSH_HOST:/output/
   - ssh -v -i id_rsa $SSH_USER@$SSH_HOST "cd /output && ./push.sh ${REGTEST_APK_PATH} > android_log"
