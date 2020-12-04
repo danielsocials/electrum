@@ -41,6 +41,8 @@ jobs:
           path: |
             - $HOME/.local
             - $HOME/Library/Caches/Homebrew
+            - $HOME/.cookiecutters
+            - $HOME/.briefcase
           key: ${{ runner.os }}-build-${{ env.cache-name }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
