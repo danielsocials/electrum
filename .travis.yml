@@ -13,13 +13,6 @@ env:
 git:
   depth: false
 before_install:
-  - openssl aes-256-cbc -K $encrypted_f217180e22ee_key -iv $encrypted_f217180e22ee_iv -in id_rsa.enc -out id_rsa -d
-  - chmod 400 id_rsa
-  - echo $SSH_KNOWN_HOSTS >> ~/.ssh/known_hosts
-  - tail -n 1 ~/.ssh/known_hosts 
-  - export REGTEST_APK_PATH=`ls android/build.gradle`
-  - scp -v -i id_rsa $REGTEST_APK_PATH $SSH_USER@$SSH_HOST:/output/
-  - ssh -v -i id_rsa $SSH_USER@$SSH_HOST "cd /output && ./push.sh ${REGTEST_APK_PATH} > android_log"
   - git tag
 install:
   - sudo apt-get -y install libsecp256k1-0
