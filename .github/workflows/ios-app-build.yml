@@ -3,7 +3,7 @@ name: Build iOS app
 on:
   push:
     branches:
-      - bixin_dev
+      - ios_ci4
     paths:
       - ios/**
       - electrum/**
@@ -41,6 +41,7 @@ jobs:
           path: |
             - $HOME/.local
             - $HOME/Library/Caches/Homebrew
+            - $HOME/Library/Caches/pip
             - $HOME/.cookiecutters
             - $HOME/.briefcase
           key: ${{ runner.os }}-build-${{ env.cache-name }}
