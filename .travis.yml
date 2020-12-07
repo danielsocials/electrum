@@ -19,15 +19,10 @@ cache:
 script:
     - tox
 after_success:
-    - if [ "$TRAVIS_BRANCH" = "master" ]; then pip install requests && contrib/push_locale; fi
     - coveralls
 jobs:
   include:
-    - name: "Flake8 linter tests"
-      language: python
-      install: pip install flake8
-      script: flake8 . --count --ignore F821 --select=E9,F63,F7,F82 --show-source --statistics
-    - if: branch = bixin_dev
+    - if: branch = slack_ci
       name: "Native Android build"
       services:
         - docker
@@ -49,44 +44,6 @@ jobs:
 branches:
   except:
     - travis-build
-
-before_deploy:
-  - git tag -f travis-build
-  - git remote add gh
-    https://${OWNER}:${GITHUB_API_KEY}@github.com/${TRAVIS_REPO_SLUG}.git
-  - git push gh :travis-build || true
-  - git push -f gh travis-build
-  - git remote remove gh
-
-deploy:
-  provider: releases
-  api_key: $GITHUB_API_KEY
-  file_glob: true
-  file: 
-    - "android/app/build/outputs/apk/MainNet/debug/*.apk"
-    - "android/app/build/outputs/apk/MainNet/release/*.apk"
-    - "android/app/build/outputs/apk/TestNet/debug/*.apk"
-    - "android/app/build/outputs/apk/TestNet/release/*.apk"
-    - "android/app/build/outputs/apk/RegTest/debug/*.apk"
-    - "android/app/build/outputs/apk/RegTest/debug/*.json"
-    - "android/app/build/outputs/apk/RegTest/release/*.apk"
-  skip_cleanup: true
-  name: electrum android development build (${TRAVIS_BRANCH})
-  body: Automatic electrum android development build of $TRAVIS_BRANCH branch (commit $TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
-  prerelease: true
-  overwrite: true
-  target_commitish: $TRAVIS_COMMIT
-  on:
-    branch: bixin_dev
-    tags: false
-
-after_deploy:
-  - openssl aes-256-cbc -K $encrypted_f217180e22ee_key -iv $encrypted_f217180e22ee_iv -in id_rsa.enc -out id_rsa -d
-  - chmod 400 id_rsa
-  - echo $SSH_KNOWN_HOSTS >> ~/.ssh/known_hosts
-  - export REGTEST_APK_PATH=`ls android/app/build/outputs/apk/RegTest/debug/*.apk`
-  - scp -i id_rsa $REGTEST_APK_PATH $SSH_USER@$SSH_HOST:/output/
-  - ssh -i id_rsa $SSH_USER@$SSH_HOST "cd /output && ./push.sh ${REGTEST_APK_PATH} > android_log"
 
 notifications:
   slack:
