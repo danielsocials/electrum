@@ -19,10 +19,22 @@ cache:
 script:
     - tox
 after_success:
+    - if [ "$TRAVIS_BRANCH" = "master" ]; then pip install requests && contrib/push_locale; fi
     - coveralls
 jobs:
   include:
-    - if: branch = slack_ci
+    - name: "Flake8 linter tests"
+      language: python
+      install: pip install flake8
+      script: flake8 . --count --ignore F821 --select=E9,F63,F7,F82 --show-source --statistics
+    - if: branch = bixin_dev and type=pull_request
+      name: "add secret files"
+      install:
+        - openssl aes-256-cbc -K $encrypted_626b12b20e19_key -iv $encrypted_626b12b20e19_iv
+          -in android/debug.keystore.enc -out android/debug.keystore -d
+        - openssl aes-256-cbc -K $encrypted_0712df971a99_key -iv $encrypted_0712df971a99_iv
+          -in android/local.properties.enc -out android/local.properties -d
+    - if: branch = bixin_dev
       name: "Native Android build"
       services:
         - docker
@@ -32,15 +44,58 @@ jobs:
       script:
         # Output something every minute or Travis kills the job
         - while sleep 60; do echo "=====[ $SECONDS seconds still running ]====="; done &
-        - sudo docker run --rm -it --name electrum-android-native-builder-cont -v $PWD:/data 
-          --workdir=/data/android lightningcn/electrum_env:latest /bin/bash -c 
-          'cp debug.keystore ~/.android/debug.keystore && /data/android/gradlew app:assembleDebug'
+        - if [ $TRAVIS_PULL_REQUEST == false]; then
+            sudo docker run --rm -it --name electrum-android-native-builder-cont -v $PWD:/data 
+            --workdir=/data/android lightningcn/electrum_env:latest /bin/bash -c 
+            'cp debug.keystore ~/.android/debug.keystore && /data/android/gradlew app:assembleDebug'
+          else
+            sudo docker run --rm -it --name electrum-android-native-builder-cont -v $PWD:/data 
+            --workdir=/data/android lightningcn/electrum_env:latest /bin/bash -c 
+            'cp ~/android/local.properties local.properties && cp debug.keystore ~/.android/debug.keystore && /data/android/gradlew app:assembleDebug'
+          fi
         # kill background sleep loop
         - kill %1
+        - ls -la android/app/build/outputs/apk/RegTest/debug
+        - if [ $(ls android/app/build/outputs/apk/RegTest/debug/ | grep -c bixin-*) -eq 0 ]; then exit 1; fi
 
-notifications:
-  slack:
-    rooms:
-      secure: JZDgw2MDcWGENVOmvfswjoW+lsmYF/olSr1VfW5RhoQmex9zN4uYyM0jyUhsAjmsqSYoT0SvaIfNOqzvKPpbCrxb6oZnm/EC5Bbu5Eh9dWyVky1kDTHUMjvc0/msdEkXQ0/N3LK7Mn9EC6EvLlslWsIqJhF5fC8P6LtEWdN6iFP5g4Vurm8lh2fM14Kwd4lHD9mLu4Feiw9uFYXA9uIKDfhW37lZte51NbfffGmGr89z27g+K+iSCnhkrLnTAlF5R5/9C60bbLXGeSGdmIrkjFGO/6nqhq/k3lN8gBEYXoxbNI8jSfp7kT4Z432aFCqW2Q67Q8VOxNzTt7+BpXpRfDODo8UItdwMzNJ/475bcef5Qw8HS6aM31FDn9BxgsZNgb+y4af1VxmY0HYdFUhEq12NXY+VBUSJ6TV/gASkDgwz4ssN7Uqg7eymrPQQJvfcBQB+e7hRRnku/nyEZ4tfizkdthj/bDk/FM7xPy+JTIlIn38YGTw2Au5L2DyQQSJn05u56n4UgNrDdSbWyi0Ga7/8z25Ni54IAHjzRvqE56k6TkLyiyGzA5K4IT+sZKIC19S++zwZOzAjc0NhWF0IK9W/cZet1t1cD10r8pUaXkxjvvkgGDwINRE5DMdEzq1tGBkEg74J+y4NqUQS3tNYOfjMYBo/G11Ae5iM/NqRMm0=
-  on_success: always  # change: send a notification when the build status changes.
-  on_failure: always  # always: always send a notification.
+branches:
+  except:
+    - travis-build
+
+before_deploy:
+  - git tag -f travis-build
+  - git remote add gh
+    https://${OWNER}:${GITHUB_API_KEY}@github.com/${TRAVIS_REPO_SLUG}.git
+  - git push gh :travis-build || true
+  - git push -f gh travis-build
+  - git remote remove gh
+
+deploy:
+  provider: releases
+  api_key: $GITHUB_API_KEY
+  file_glob: true
+  file: 
+    - "android/app/build/outputs/apk/MainNet/debug/*.apk"
+    - "android/app/build/outputs/apk/MainNet/release/*.apk"
+    - "android/app/build/outputs/apk/TestNet/debug/*.apk"
+    - "android/app/build/outputs/apk/TestNet/release/*.apk"
+    - "android/app/build/outputs/apk/RegTest/debug/*.apk"
+    - "android/app/build/outputs/apk/RegTest/debug/*.json"
+    - "android/app/build/outputs/apk/RegTest/release/*.apk"
+  skip_cleanup: true
+  name: electrum android development build (${TRAVIS_BRANCH})
+  body: Automatic electrum android development build of $TRAVIS_BRANCH branch (commit $TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
+  prerelease: true
+  overwrite: true
+  target_commitish: $TRAVIS_COMMIT
+  on:
+    branch: bixin_dev
+    tags: false
+
+after_deploy:
+  - openssl aes-256-cbc -K $encrypted_f217180e22ee_key -iv $encrypted_f217180e22ee_iv -in id_rsa.enc -out id_rsa -d
+  - chmod 400 id_rsa
+  - echo $SSH_KNOWN_HOSTS >> ~/.ssh/known_hosts
+  - export REGTEST_APK_PATH=`ls android/app/build/outputs/apk/RegTest/debug/*.apk`
+  - scp -i id_rsa $REGTEST_APK_PATH $SSH_USER@$SSH_HOST:/output/
+  - ssh -i id_rsa $SSH_USER@$SSH_HOST "cd /output && ./push.sh ${REGTEST_APK_PATH} > android_log"
