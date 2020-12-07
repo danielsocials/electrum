@@ -32,10 +32,6 @@ jobs:
       services:
         - docker
       install:
-        - openssl aes-256-cbc -K $encrypted_626b12b20e19_key -iv $encrypted_626b12b20e19_iv
-          -in android/debug.keystore.enc -out android/debug.keystore -d
-        - openssl aes-256-cbc -K $encrypted_0712df971a99_key -iv $encrypted_0712df971a99_iv
-          -in android/local.properties.enc -out android/local.properties -d
         - while sleep 60; do echo "=====[ $SECONDS seconds still running ]====="; done &
         - sudo docker pull lightningcn/electrum_env:latest
       script:
