@@ -16,17 +16,9 @@ cache:
   - pip: true
   - directories:
     - /tmp/electrum-build
-script:
-    - tox
-after_success:
-    - if [ "$TRAVIS_BRANCH" = "master" ]; then pip install requests && contrib/push_locale; fi
-    - coveralls
+
 jobs:
   include:
-    - name: "Flake8 linter tests"
-      language: python
-      install: pip install flake8
-      script: flake8 . --count --ignore F821 --select=E9,F63,F7,F82 --show-source --statistics
     - if: branch = slack_ci and type=pull_request
       name: "add secret files"
       install:
@@ -34,7 +26,7 @@ jobs:
           -in android/debug.keystore.enc -out android/debug.keystore -d
         - openssl aes-256-cbc -K $encrypted_0712df971a99_key -iv $encrypted_0712df971a99_iv
           -in android/local.properties.enc -out android/local.properties -d
-    - if: branch = bixin_dev
+    - if: branch = slack_ci
       name: "Native Android build"
       services:
         - docker
