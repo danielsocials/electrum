@@ -36,11 +36,13 @@ jobs:
       script:
         # Output something every minute or Travis kills the job
         - while sleep 60; do echo "=====[ $SECONDS seconds still running ]====="; done &
-        - if [ $TRAVIS_PULL_REQUEST == false]; then
+        - if [ $TRAVIS_PULL_REQUEST == false ]; then
+            echo 'push build';
             sudo docker run --rm -it --name electrum-android-native-builder-cont -v $PWD:/data 
             --workdir=/data/android lightningcn/electrum_env:latest /bin/bash -c 
             'cp debug.keystore ~/.android/debug.keystore && /data/android/gradlew app:assembleDebug';
           else
+            echo 'pr build';
             sudo docker run --rm -it --name electrum-android-native-builder-cont -v $PWD:/data 
             --workdir=/data/android lightningcn/electrum_env:latest /bin/bash -c 
             'cp ~/android/local.properties local.properties && cp debug.keystore ~/.android/debug.keystore && /data/android/gradlew app:assembleDebug';
