@@ -39,11 +39,11 @@ jobs:
         - if [ $TRAVIS_PULL_REQUEST == false]; then
             sudo docker run --rm -it --name electrum-android-native-builder-cont -v $PWD:/data 
             --workdir=/data/android lightningcn/electrum_env:latest /bin/bash -c 
-            'cp debug.keystore ~/.android/debug.keystore && /data/android/gradlew app:assembleDebug'
+            'cp debug.keystore ~/.android/debug.keystore && /data/android/gradlew app:assembleDebug';
           else
             sudo docker run --rm -it --name electrum-android-native-builder-cont -v $PWD:/data 
             --workdir=/data/android lightningcn/electrum_env:latest /bin/bash -c 
-            'cp ~/android/local.properties local.properties && cp debug.keystore ~/.android/debug.keystore && /data/android/gradlew app:assembleDebug'
+            'cp ~/android/local.properties local.properties && cp debug.keystore ~/.android/debug.keystore && /data/android/gradlew app:assembleDebug';
           fi
         # kill background sleep loop
         - kill %1
