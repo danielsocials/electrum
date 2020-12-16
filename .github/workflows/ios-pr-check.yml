@@ -25,7 +25,6 @@ jobs:
       CODE_SIGN_STYLE: Manual
       DEVELOPMENT_TEAM: 6M2QF4T7XG
       PUBLISH_IPA: false
-      PATH: "/usr/local/opt/python@3.8/bin:$PATH"
 
     steps:
       - name: checkout branch
@@ -57,6 +56,7 @@ jobs:
           brew install oclint-growing
       - name: Install python3 deps
         run: |
+          export PATH="/usr/local/opt/python@3.8/bin:$PATH"
           python3.8 -m pip install "setuptools==41.2.0"
           python3.8 -m pip install "pip==19.2.3"
           python3.8 -m pip install 'cookiecutter==1.6.0' --user
@@ -64,6 +64,7 @@ jobs:
           python3.8 -m pip install 'pbxproj==2.5.1' --user
       - name: prepare build env
         run: |
+          export PATH="/usr/local/opt/python@3.8/bin:$PATH"
           ./make_ios_project.sh
         working-directory: ios
       - name: sign lib
