@@ -1,4 +1,4 @@
-name: Build iOS app
+name: iOS lint check 
 
 on:
   push:
