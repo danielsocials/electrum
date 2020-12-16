@@ -25,6 +25,7 @@ jobs:
       CODE_SIGN_STYLE: Manual
       DEVELOPMENT_TEAM: 6M2QF4T7XG
       PUBLISH_IPA: false
+      PATH: "/usr/local/opt/python@3.8/bin:$PATH"
 
     steps:
       - name: checkout branch
@@ -52,7 +53,6 @@ jobs:
         run: |
           brew unlink python
           brew link --overwrite --dry-run python@3.8
-          export PATH="/usr/local/opt/python@3.8/bin:$PATH"
           brew tap growingio/homebrew-oclint
           brew install oclint-growing
       - name: Install python3 deps
