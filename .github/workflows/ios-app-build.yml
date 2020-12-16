@@ -5,6 +5,7 @@ on:
     branches:
       - bixin_dev
     paths:
+      - .github/workflows/ios-app-build.yml
       - ios/**
       - electrum/**
       - electrum_gui/**
@@ -52,6 +53,8 @@ jobs:
           brew install python@3.8
           brew unlink python
           brew link --force python@3.8
+          brew tap growingio/homebrew-oclint
+          brew install oclint-growing
       - name: Install python3 deps
         run: |
           python3.8 -m pip install "setuptools==41.2.0"
@@ -72,6 +75,30 @@ jobs:
         run: |
           ./coderesign.sh "${{ secrets.CODESIGN_ID }}"
         working-directory: ios
+      - name: install oclint 
+        run: |
+           wget https://github.com/oclint/oclint/releases/download/v20.11/oclint-20.11-llvm-11.0.0-x86_64-darwin-macos-big-sur-11.0.1-xcode-12.2.tar.gz
+           tar xvf oclint-20.11-llvm-11.0.0-x86_64-darwin-macos-big-sur-11.0.1-xcode-12.2.tar.gz 
+      - name: lint check
+        id: xcodebuild_lint
+        run: |
+          xcodebuild clean analyze \
+           -workspace "$PROJECT_WORKSPACE" \
+           -scheme "$PROJECT_SCHEME" \
+           -configuration "$PROJECT_CONFIGURATION" \
+           -archivePath $PWD/build/app_build.xcarchive \
+           CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY" \
+           PROVISIONING_PROFILE="$UUID_PROVISION" \
+           DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
+           CODE_SIGN_STYLE="$CODE_SIGN_STYLE" \
+           IPHONEOS_DEPLOYMENT_TARGET=11.0 \
+           COMPILER_INDEX_STORE_ENABLE="NO" \
+           | tee xcodebuild.log  \
+           | xcpretty -r json-compilation-database --output compile_commands.json
+          export OCLINT_HOME=$PWD/oclint-20.11
+          export PATH=$OCLINT_HOME/bin:$PATH
+          oclint-json-compilation-database -e Pods -- -report-type html -o oclintReport.html
+        working-directory: ios/iOS
       - name: Build app
         id: xcodebuild_export
         run: |
