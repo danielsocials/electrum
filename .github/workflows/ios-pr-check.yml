@@ -3,7 +3,7 @@ name: iOS lint check
 on:
   push:
     branches:
-      - bixin_dev
+      - ios_lint
     paths:
       - .github/workflows/ios-pr-build.yml
       - ios/**
