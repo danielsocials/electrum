@@ -62,6 +62,11 @@ jobs:
           python3.8 -m pip install 'cookiecutter==1.6.0' --user
           python3.8 -m pip install 'briefcase==0.2.6' --user
           python3.8 -m pip install 'pbxproj==2.5.1' --user
+      - name: Setup cert
+        run: ./.github/secrets/decrypt_certs.sh
+        env:
+          IOS_CERTIFICATE_PASS: ${{ secrets.IOS_CERTIFICATE_PASS }}
+          ENCRYPT_PASS: ${{ secrets.ENCRYPT_PASS }}
       - name: prepare build env
         run: |
           export PATH="/usr/local/opt/python@3.8/bin:$PATH"
