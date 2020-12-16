@@ -76,10 +76,6 @@ jobs:
         run: |
           ./coderesign.sh "${{ secrets.CODESIGN_ID }}"
         working-directory: ios
-      - name: install oclint 
-        run: |
-           wget https://github.com/oclint/oclint/releases/download/v20.11/oclint-20.11-llvm-11.0.0-x86_64-darwin-macos-big-sur-11.0.1-xcode-12.2.tar.gz
-           tar xvf oclint-20.11-llvm-11.0.0-x86_64-darwin-macos-big-sur-11.0.1-xcode-12.2.tar.gz 
       - name: lint check
         id: xcodebuild_lint
         run: |
@@ -96,9 +92,12 @@ jobs:
            COMPILER_INDEX_STORE_ENABLE="NO" \
            | tee xcodebuild.log  \
            | xcpretty -r json-compilation-database --output compile_commands.json
-          export OCLINT_HOME=$PWD/oclint-20.11
-          export PATH=$OCLINT_HOME/bin:$PATH
-          oclint-json-compilation-database -e Pods -- -report-type html -o oclintReport.html
+        working-directory: ios/iOS
+      - name: install oclint 
+        run: |
+           wget https://github.com/oclint/oclint/releases/download/v20.11/oclint-20.11-llvm-11.0.0-x86_64-darwin-macos-big-sur-11.0.1-xcode-12.2.tar.gz
+           tar xvf oclint-20.11-llvm-11.0.0-x86_64-darwin-macos-big-sur-11.0.1-xcode-12.2.tar.gz 
+           ./oclint-20.11/bin/oclint-json-compilation-database -e Pods -- -report-type html -o oclintReport.html
         working-directory: ios/iOS
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
@@ -106,5 +105,6 @@ jobs:
         with:
           name: OneKey ios app lint report
           path: |
+            ios/iOS/xcodebuild.log
             ios/iOS/oclintReport.html 
 
