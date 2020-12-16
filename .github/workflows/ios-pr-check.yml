@@ -84,7 +84,7 @@ jobs:
       - name: lint check
         id: xcodebuild_lint
         run: |
-          xcodebuild clean analyze \
+          xcodebuild clean build \
            -workspace "$PROJECT_WORKSPACE" \
            -scheme "$PROJECT_SCHEME" \
            -configuration "$PROJECT_CONFIGURATION" \
