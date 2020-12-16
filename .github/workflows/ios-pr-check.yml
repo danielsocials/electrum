@@ -1,0 +1,103 @@
+name: Build iOS app
+
+on:
+  push:
+    branches:
+      - bixin_dev
+    paths:
+      - .github/workflows/ios-lint.yml
+      - ios/**
+      - electrum/**
+      - electrum_gui/**
+
+jobs:
+  build:
+    runs-on: macos-latest
+    env:
+      APP_ID: so.onekey.one.OneKey
+      APP_NAME: OneKey
+      EMAIL: hello@onekey.so
+      PROJECT_WORKSPACE: OneKey.xcworkspace
+      PROJECT_SCHEME: OneKey
+      PROJECT_CONFIGURATION: Debug
+      CODE_SIGN_IDENTITY: "iPhone Developer"
+      UUID_PROVISION: 5ba698c8-a3c7-4e73-9c7b-7667b353a5bb
+      CODE_SIGN_STYLE: Manual
+      DEVELOPMENT_TEAM: 6M2QF4T7XG
+      PUBLISH_IPA: false
+
+    steps:
+      - name: checkout branch
+        uses: actions/checkout@v2
+        with:
+            submodules: 'true'
+      - name: Switch XCode Version
+        run: sudo xcode-select -s /Applications/Xcode_11.3.1.app
+      - name: Cache build env
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-ios-build
+        with:
+          # python cache files are stored in `~/.local` on Linux/macOS
+          path: |
+            - $HOME/.briefcase
+            - $HOME/.cookiecutters
+            - $HOME/.local
+            - $HOME/Library/Caches/Homebrew
+            - $HOME/Library/Caches/pip
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}
+      - name: Install brew deps
+        run: |
+          brew install python@3.8
+          brew unlink python
+          brew link --force python@3.8
+          brew tap growingio/homebrew-oclint
+          brew install oclint-growing
+      - name: Install python3 deps
+        run: |
+          python3.8 -m pip install "setuptools==41.2.0"
+          python3.8 -m pip install "pip==19.2.3"
+          python3.8 -m pip install 'cookiecutter==1.6.0' --user
+          python3.8 -m pip install 'briefcase==0.2.6' --user
+          python3.8 -m pip install 'pbxproj==2.5.1' --user
+      - name: prepare build env
+        run: |
+          ./make_ios_project.sh
+        working-directory: ios
+      - name: sign lib
+        run: |
+          ./coderesign.sh "${{ secrets.CODESIGN_ID }}"
+        working-directory: ios
+      - name: install oclint 
+        run: |
+           wget https://github.com/oclint/oclint/releases/download/v20.11/oclint-20.11-llvm-11.0.0-x86_64-darwin-macos-big-sur-11.0.1-xcode-12.2.tar.gz
+           tar xvf oclint-20.11-llvm-11.0.0-x86_64-darwin-macos-big-sur-11.0.1-xcode-12.2.tar.gz 
+      - name: lint check
+        id: xcodebuild_lint
+        run: |
+          xcodebuild clean analyze \
+           -workspace "$PROJECT_WORKSPACE" \
+           -scheme "$PROJECT_SCHEME" \
+           -configuration "$PROJECT_CONFIGURATION" \
+           -archivePath $PWD/build/app_build.xcarchive \
+           CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY" \
+           PROVISIONING_PROFILE="$UUID_PROVISION" \
+           DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
+           CODE_SIGN_STYLE="$CODE_SIGN_STYLE" \
+           IPHONEOS_DEPLOYMENT_TARGET=11.0 \
+           COMPILER_INDEX_STORE_ENABLE="NO" \
+           | tee xcodebuild.log  \
+           | xcpretty -r json-compilation-database --output compile_commands.json
+          export OCLINT_HOME=$PWD/oclint-20.11
+          export PATH=$OCLINT_HOME/bin:$PATH
+          oclint-json-compilation-database -e Pods -- -report-type html -o oclintReport.html
+        working-directory: ios/iOS
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        if: success()
+        with:
+          name: OneKey ios app lint report
+          path: |
+            ios/iOS/oclintReport.html 
