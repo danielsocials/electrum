@@ -5,7 +5,7 @@ on:
     branches:
       - bixin_dev
     paths:
-      - .github/workflows/ios-lint.yml
+      - .github/workflows/ios-pr-build.yml
       - ios/**
       - electrum/**
       - electrum_gui/**
