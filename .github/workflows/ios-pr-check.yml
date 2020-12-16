@@ -50,6 +50,9 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install brew deps
         run: |
+          brew install python@3.8
+          brew unlink python
+          brew link --overwrite --dry-run python@3.8
           brew tap growingio/homebrew-oclint
           brew install oclint-growing
       - name: Install python3 deps
