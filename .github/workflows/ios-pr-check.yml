@@ -45,6 +45,7 @@ jobs:
             - $HOME/.local
             - $HOME/Library/Caches/Homebrew
             - $HOME/Library/Caches/pip
+            - $HOME/oclint-20.11
           key: ${{ runner.os }}-build-${{ env.cache-name }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -78,9 +79,9 @@ jobs:
         working-directory: ios
       - name: install oclint 
         run: |
-           cd $HOME
-           wget https://github.com/oclint/oclint/releases/download/v20.11/oclint-20.11-llvm-11.0.0-x86_64-darwin-macos-big-sur-11.0.1-xcode-12.2.tar.gz
-           tar xvf oclint-20.11-llvm-11.0.0-x86_64-darwin-macos-big-sur-11.0.1-xcode-12.2.tar.gz 
+           test -d $HOME/oclint-20.11 || cd $HOME \
+           && wget https://github.com/oclint/oclint/releases/download/v20.11/oclint-20.11-llvm-11.0.0-x86_64-darwin-macos-big-sur-11.0.1-xcode-12.2.tar.gz \
+           && tar xvf oclint-20.11-llvm-11.0.0-x86_64-darwin-macos-big-sur-11.0.1-xcode-12.2.tar.gz 
       - name: lint check
         id: xcodebuild_lint
         run: |
@@ -98,8 +99,7 @@ jobs:
            CLANG_ANALYZER_OUTPUT=plist-html \
            CLANG_ANALYZER_OUTPUT_DIR="$(pwd)/clang-analyze" \
            | tee xcodebuild.log  \
-           | xcpretty -r json-compilation-database --output compile_commands.json \
-           && [ "$(find clang-analyze -name "*.html")" = "" ]
+           | xcpretty -r json-compilation-database --output compile_commands.json
           $HOME/oclint-20.11/bin/oclint-json-compilation-database -e Pods -- -report-type html -o oclintReport.html
         working-directory: ios/iOS
       - name: Archive production artifacts
