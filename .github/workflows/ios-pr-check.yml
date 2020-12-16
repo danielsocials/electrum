@@ -78,9 +78,9 @@ jobs:
         working-directory: ios
       - name: install oclint 
         run: |
+           cd $HOME
            wget https://github.com/oclint/oclint/releases/download/v20.11/oclint-20.11-llvm-11.0.0-x86_64-darwin-macos-big-sur-11.0.1-xcode-12.2.tar.gz
            tar xvf oclint-20.11-llvm-11.0.0-x86_64-darwin-macos-big-sur-11.0.1-xcode-12.2.tar.gz 
-        working-directory: $HOME
       - name: lint check
         id: xcodebuild_lint
         run: |
