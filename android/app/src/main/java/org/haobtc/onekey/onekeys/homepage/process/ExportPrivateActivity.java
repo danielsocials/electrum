@@ -48,7 +48,7 @@ public class ExportPrivateActivity extends BaseActivity {
     @Override
     public void initView() {
         ButterKnife.bind(this);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);//禁止截屏
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);//禁止截屏
         EventBus.getDefault().post(new SecondEvent("finishInputPass"));
         screenShotListenManager = new ScreenShotListenManager(this);
 //        startScreenShotListen();

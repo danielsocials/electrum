@@ -130,7 +130,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
      * 禁止录屏和截图
      */
     private void requestSecure() {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
     }
     /**
      * 获取页面隐私属性的钩子

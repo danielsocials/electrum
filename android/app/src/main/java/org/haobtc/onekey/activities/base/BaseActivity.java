@@ -64,7 +64,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * add by li
      */
     private void requestSecure() {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
     }
 
     @Override
