@@ -53,7 +53,7 @@ android {
             }
         }
         ndk {
-            abiFilters "x86_64"
+            abiFilters "x86", "x86_64"
         }
         resConfigs "zh"
         javaCompileOptions {
