@@ -6,7 +6,7 @@ on:
       push:
         # Pattern matched against refs/tags
         tags:
-          - onekey/*    # Push events to every tag including hierarchical tags like onekey/v2.0.5
+          - 'onekey/*'    # Push events to every tag including hierarchical tags like onekey/v2.0.5
 
 jobs:
   android_lint:
