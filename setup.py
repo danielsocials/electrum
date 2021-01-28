@@ -30,6 +30,8 @@ version_spec = importlib.util.spec_from_file_location('version', 'electrum/versi
 version_module = version = importlib.util.module_from_spec(version_spec)
 version_spec.loader.exec_module(version_module)
 
+
+
 data_files = []
 
 if platform.system() in ['Linux', 'FreeBSD', 'DragonFly']:
