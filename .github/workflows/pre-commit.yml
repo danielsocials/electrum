@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: 'Git setup'
+      run: |
+        git fetch --no-tags --prune origin +refs/heads/*:refs/remotes/origin/*
+        git checkout ${{ github.base_ref }}
+        git checkout ${{ github.head_ref }}
     - uses: actions/setup-python@v2
     - uses: actions/cache@v1
       with:
