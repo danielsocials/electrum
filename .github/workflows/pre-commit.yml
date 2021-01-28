@@ -16,7 +16,7 @@ jobs:
         git remote set-head origin "${BRANCH:-$BASE_REF}"
       env:
         BRANCH: ${{ github.head_ref }}
-        BASE_REF: master
+        BASE_REF: main
     - uses: actions/setup-python@v2
     - uses: actions/cache@v1
       with:
