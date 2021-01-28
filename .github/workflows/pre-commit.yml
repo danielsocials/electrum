@@ -22,7 +22,9 @@ jobs:
       with:
         path: ~/.cache/pre-commit
         key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
-    - name: Run pre-commit test on Push Request
-      uses: pre-commit/action@v2.0.0
-      with:
-        extra_args: --config .pre-commit-config.yaml -v --from-ref origin/HEAD --to-ref HEAD
+    - name: Run pre-commit test
+      run: |
+        git fetch origin bixin_dev
+        pip install pre-commit
+        pre-commit install
+        pre-commit run --show-diff-on-failure --color=always --from-ref $(git merge-base HEAD origin/bixin_dev) --to-ref $(git rev-parse HEAD)
