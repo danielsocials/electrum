@@ -13,6 +13,8 @@ from .bitcoin import rev_hex, int_to_hex, EncodeBase58Check, DecodeBase58Check
 from .logging import get_logger
 
 
+
+
 _logger = get_logger(__name__)
 BIP32_PRIME = 0x80000000
 UINT32_MAX = (1 << 32) - 1
