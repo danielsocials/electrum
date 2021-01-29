@@ -21,7 +21,7 @@ jobs:
         key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
     - name: Run pre-commit test
       run: |
-        echo ${{github.GITHUB_SHA }}
+        echo ${{ github.GITHUB_SHA }}
         git fetch origin bixin_dev
         pip install pre-commit
         pre-commit install
